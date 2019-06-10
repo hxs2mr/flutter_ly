@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:hxsly_app/dao/home_dao.dart';
+import 'package:hxsly_app/model/common_model.dart';
+import 'package:hxsly_app/model/gridnav_model.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:hxsly_app/model/home_model.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:hxsly_app/widget/grid_nav.dart';
+import 'package:hxsly_app/widget/home_grid_item.dart';
+import 'package:hxsly_app/widget/local_nav.dart';
+import 'package:hxsly_app/widget/sub_nav.dart';
 
 const APPBAR_SCROLL_OFFISET = 150; //滚动最大的距离
+
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-
-  List _images = [
-    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1558325125847&di=8592b2804eb52e7e3760dc89eff99543&imgtype=0&src=http%3A%2F%2Fpic40.nipic.com%2F20140412%2F18428321_144447597175_2.jpg',
-    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1558325125847&di=dd7c90fe418030f53d674b773861fac3&imgtype=0&src=http%3A%2F%2Fpic37.nipic.com%2F20140113%2F8800276_184927469000_2.png',
-    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1558325125847&di=8c37fac950dec0963252d401ddfc0168&imgtype=0&src=http%3A%2F%2Fpic15.nipic.com%2F20110628%2F1369025_192645024000_2.jpg'
-  ];
   double appBarAloha = 0;
+  List<CommonModel> localNavList = [];
+  GridNavModel gridNavModel;
+  List<CommonModel> bannerList = [];
+  List<CommonModel> subList = [];
 
   onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFISET;
@@ -32,7 +37,6 @@ class HomePageState extends State<HomePage> {
     });
     print(appBarAloha);
   }
-
 
   String resultsST = "1";
 
@@ -54,7 +58,10 @@ class HomePageState extends State<HomePage> {
     try {
       HomeModel model = await HomeDao.fetch();
       setState(() {
-        resultsST = model.salesBox.icon;
+        localNavList = model.localNavList;
+        gridNavModel = model.gridNav;
+        bannerList = model.bannerList;
+        subList = model.subNavList;
         print(resultsST);
       });
     } catch (e) {
@@ -77,6 +84,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Scaffold(
+        backgroundColor: Color(0xfff2f2f2),
         body: new Stack(
           children: <Widget>[
             new MediaQuery.removePadding(
@@ -85,7 +93,9 @@ class HomePageState extends State<HomePage> {
                 child: NotificationListener(
                   //监听列表滚动
                   onNotification: (scroll) {
-                    if (scroll is ScrollUpdateNotification && scroll.depth == 0) {   //第0个元素 才触发监听
+                    if (scroll is ScrollUpdateNotification &&
+                        scroll.depth == 0) {
+                      //第0个元素 才触发监听
                       onScroll(scroll.metrics.pixels);
                     }
                   },
@@ -94,27 +104,39 @@ class HomePageState extends State<HomePage> {
                       new Container(
                         height: 200,
                         child: new Swiper(
-                          itemCount: _images.length,
-                          autoplay: true,
+                          itemCount: bannerList.length,
+                          autoplay: false,
                           itemBuilder: (BuildContext context, int index) {
                             return Image.network(
-                              _images[index],
+                              bannerList[index].icon,
                               fit: BoxFit.fill,
                             );
                           },
-                          pagination: SwiperPagination(),
                           controller: new SwiperController(),
                         ),
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                        child: LocalNav(localNavList: localNavList),
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                        child: GridNav(gridNavModel: gridNavModel),
+                      ),
+                      new Padding(
+                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                        child: SubNav(subNavList: subList),
                       ),
                       new Container(
                         height: 800,
                         child: new Text(resultsST),
                       ),
                       InkWell(
-                        onTap: (){
-
-                        },
-                        child: new Text('网络请求',style: TextStyle(fontSize: 30),),
+                        onTap: () {},
+                        child: new Text(
+                          '网络请求',
+                          style: TextStyle(fontSize: 30),
+                        ),
                       )
                     ],
                   ),
@@ -134,7 +156,6 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
           ],
         ));
   }

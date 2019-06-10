@@ -40,7 +40,7 @@ class HeroDemoApp extends StatelessWidget {
 
       ) ),
     );
-  }
+  } 
 }
 
 class  HeroAnimation extends StatelessWidget {
