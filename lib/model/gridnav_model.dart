@@ -1,5 +1,4 @@
 import 'package:hxsly_app/model/common_model.dart';
-import 'package:hxsly_app/model/config_model.dart';
 
 ///首页网格卡片模型
 class GridNavModel {

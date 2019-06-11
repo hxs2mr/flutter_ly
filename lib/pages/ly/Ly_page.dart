@@ -4,7 +4,7 @@
 //功能描述 :
 import 'package:flutter/material.dart';
 
- var CITY_NAMES =['北京','上海','广州','深圳','杭州','习水','温水','重庆','长沙','湖北','武汉','日本','英国','美国'];
+    var CITY_NAMES =['北京','上海','广州','深圳','杭州','习水','温水','重庆','长沙','湖北','武汉','日本','英国','美国'];
 class LyPage extends StatefulWidget {
   @override
   LyPageState createState() => new LyPageState();

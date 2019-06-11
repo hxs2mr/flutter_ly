@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hxsly_app/HeroDemo.dart';
-import 'package:hxsly_app/animdemo.dart';
 import 'package:hxsly_app/navigator/tab_navigator.dart';
 
 void main() => runApp(MainApp());

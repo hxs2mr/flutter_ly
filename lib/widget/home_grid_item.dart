@@ -12,12 +12,6 @@ class HomeGridItem extends StatefulWidget {
   final GridNavModel homeGridModel;
   const HomeGridItem({Key key, @required this.homeGridModel, this.name = '首页'})
       : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return  new Text('首页');
-  }
 }
 
 class _HomeGriditemState extends State<HomeGridItem>{

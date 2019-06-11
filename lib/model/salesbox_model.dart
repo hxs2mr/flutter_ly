@@ -1,6 +1,4 @@
 import 'package:hxsly_app/model/common_model.dart';
-import 'package:hxsly_app/model/config_model.dart';
-import 'package:hxsly_app/model/gridnav_model.dart';
 
 ///活动入口的模型
 class SalesBoxModel {

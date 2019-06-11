@@ -1,5 +1,4 @@
 
-import 'package:hxsly_app/model/config_model.dart';
 
 class CommonModel{
   final String icon;
