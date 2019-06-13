@@ -9,17 +9,19 @@ import 'package:hxsly_app/widget/grid_nav.dart';
 import 'package:hxsly_app/widget/loadint_container.dart';
 import 'package:hxsly_app/widget/local_nav.dart';
 import 'package:hxsly_app/widget/sales_box.dart';
+import 'package:hxsly_app/widget/search_bar.dart';
 import 'package:hxsly_app/widget/sub_nav.dart';
 import 'package:hxsly_app/widget/web_view.dart';
 
 const APPBAR_SCROLL_OFFISET = 150; //滚动最大的距离
+const SEARCH_BAR_DEFAULT_TEXT = '贵阳 黔灵山 花溪';
 
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin{
   double appBarAloha = 0;
   List<CommonModel> localNavList = [];
   GridNavModel gridNavModel;
@@ -119,13 +121,13 @@ class HomePageState extends State<HomePage> {
                                 onTap: () {
                                   Navigator.push(context,
                                       new MaterialPageRoute(builder: (context) {
-                                        CommonModel model = bannerList[index];
-                                        return WebView(
-                                          url: model.url,
-                                          title: model.title,
-                                          hideAppBar: model.hideAppBar,
-                                        );
-                                      }));
+                                    CommonModel model = bannerList[index];
+                                    return WebView(
+                                      url: model.url,
+                                      title: model.title,
+                                      hideAppBar: model.hideAppBar,
+                                    );
+                                  }));
                                 },
                                 child: Image.network(
                                   bannerList[index].icon,
@@ -157,25 +159,50 @@ class HomePageState extends State<HomePage> {
                       ],
                     ),
                   )),
-              new Opacity(
-                opacity: appBarAloha,
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: new Center(
-                    child: new Padding(
-                      padding: EdgeInsets.only(top: 35),
-                      child: new Text('首页'),
+              new Column(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Color(0x66000000), Colors.transparent],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter)),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(
+                            (appBarAloha * 255).toInt(), 255, 255, 255),
+                      ),
+                      child: SearchBar(
+                        searchBarType: appBarAloha > 0.2
+                            ? SearchBarType.homeLight
+                            : SearchBarType.home,
+                        inputBoxClick: _jumpTosearch,
+                        speakClick: _jumpToSpeak,
+                        defaultText: SEARCH_BAR_DEFAULT_TEXT,
+                        leftButtonClick: () {},
+                      ),
                     ),
                   ),
-                ),
+                  Container(
+                    height: appBarAloha > 0.2 ? 0.5 : 0,
+                    decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 0.5)],
+                    ),
+                  )
+                ],
               ),
             ],
           ),
-
         ));
   }
 
+  _jumpTosearch() {}
+
+  _jumpToSpeak() {}
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

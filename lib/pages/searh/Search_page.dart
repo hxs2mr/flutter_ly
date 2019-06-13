@@ -3,6 +3,7 @@
 // 版本号: 1.0
 //功能描述 :
 import 'package:flutter/material.dart';
+import 'package:hxsly_app/widget/search_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class SearchPage extends StatefulWidget {
   @override
@@ -15,44 +16,25 @@ class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Center(
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('搜索'),
-        ),
-        body: new Center(
-            child: new Column(
-              children: <Widget>[
-                new RaisedButton(
-                    onPressed:_inaddCounter,
-                  child: new Text("添加数据"),
-                    ),
-                new RaisedButton(onPressed: _getCounter,
-                child: new Text('获取数据'),),
-                new Text(countString),
-                new Text(count),
-              ],
-            ),
-
-        )
+    return  new Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: <Widget>[
+          SearchBar(
+            hideLeft: true,
+            defaultText: '深圳',
+            hint: '搜索',
+            leftButtonClick: (){
+              Navigator.pop(context);
+            },
+            onChanged: _onTextChange,
+          ),
+        ],
       ),
     );
+
   }
+  _onTextChange(text){
 
-
-  _inaddCounter()async{
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      setState(() {
-        countString=countString+"1";
-      });
-      int counter =(sp.getInt('counter')??0)+1;
-     await  sp.setInt('counter', counter);
   }
-
-   _getCounter() async{
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    setState(() {
-      count = sp.getInt('counter').toString();
-    });
-   }
 }
